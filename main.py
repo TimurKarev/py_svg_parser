@@ -1,8 +1,11 @@
 from tkinter import *
 from tkinter import filedialog
 import pandas as pd
+
+from models.data_model import DataModel
 from services.parse_svg import SVGParser
 from ui.chart_window import ChartWindow
+from ui.start_window import StartWindow
 
 headers = [
     "Первичная формулировка",
@@ -108,26 +111,30 @@ def updateTable():
 
 if __name__ == '__main__':
     root = Tk()
-    df = pd.DataFrame()
-    ar = []
+    start_window = Toplevel(root)
+    StartWindow(start_window)
 
-    try:
-        root.filename = filedialog.askopenfilename()  # (initialdir="/", title="Select file",
-        # filetypes=(("svg files", "*.svg"), ("all files", "*.*")))
-    except:
-        print('kda;ldska;ldk;')
-
-    if root.filename[-3:] == 'svg':
-        problems = SVGParser.parse_svg(root.filename)
-        column_num = len(headers)
-        df = pd.DataFrame(problems, columns=[headers[0]])
-        for i in range(1, column_num):
-            df.insert(len(df.columns), headers[i], value='')
-    elif root.filename[-3:] == 'csv':
-        df = pd.read_csv('current_test.csv')
-        df = df.fillna(' ')
-
-    updateTable()
-
-    root.focus_force()
-    root.mainloop()
+    #
+    df = DataModel().df
+    # root.quit()
+    # ar = []
+    #
+    # try:
+    #     root.filename = filedialog.askopenfilename()  # (initialdir="/", title="Select file",
+    #     # filetypes=(("svg files", "*.svg"), ("all files", "*.*")))
+    # except:
+    #     print('kda;ldska;ldk;')
+    #
+    # if root.filename[-3:] == 'svg':
+    #     problems = SVGParser.parse_svg(root.filename)
+    #     column_num = len(headers)
+    #     df = pd.DataFrame(problems, columns=[headers[0]])
+    #     for i in range(1, column_num):
+    #         df.insert(len(df.columns), headers[i], value='')
+    # elif root.filename[-3:] == 'csv':
+    #     df = pd.read_csv('current_test.csv')
+    #     df = df.fillna(' ')
+    #
+    # updateTable()
+    #
+    # root.focus_force()
