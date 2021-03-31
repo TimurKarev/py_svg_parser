@@ -26,8 +26,11 @@ class SVGParser:
                     if path.attrib['class'] == class_tag:
                         current_desk = g.find('{http://www.w3.org/2000/svg}text')
                         txt = ''
-                        for t in current_desk.itertext():
-                            txt += t
+                        try:
+                            for t in current_desk.itertext():
+                                txt += t
+                        except:
+                            pass
                         if txt != '' and txt != 'ОПИСАНИЕ ПРОБЛЕМЫ/ЗАДАЧИ':
                             result.append(txt)
         return result

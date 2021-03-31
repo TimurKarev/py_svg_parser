@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
+from pathlib import Path
 import pandas as pd
 
 from models.data_model import DataModel
@@ -26,6 +27,12 @@ def save_df():
     df = DataModel().df
     df.to_csv(DataModel().filename, index=False, encoding='utf-8-sig')
 
+def save_as_df():
+    filename = filedialog.asksaveasfilename(initialdir="C:/Users/User/Documents/Project/py_svg_parser",
+                                            title="Select file",
+                                            filetypes=(("svg files", "*.csv"),))
+    DataModel().filename = Path(filename)
+    save_df()
 
 def clear_grid():
     df = DataModel().df
@@ -40,7 +47,7 @@ def add_row():
     d = {}
     for i in range(len(df.columns)):
         d[df.columns[i]] = ' '
-    df = df.append(d, ignore_index=True)
+    DataModel().df = df.append(d, ignore_index=True)
     updateTable()
 
 
@@ -94,7 +101,7 @@ def updateTable():
     button = Button(root, text='+', command=add_row)
     button.grid(column=0, row=df.shape[0] + 1)
 
-    button = Button(root, text='   V   ', command=save_df)
+    button = Button(root, text='   V   ', command=save_as_df)
     button.grid(column=len(df.columns)-1, columnspan=2, row=df.shape[0] + 1)
 
     button = Button(root, text='       ->        ', command=goto_charts)

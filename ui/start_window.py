@@ -11,14 +11,17 @@ class StartWindow:
 
         self.updateParent = updateParent
 
-        button = tk.Button(self.wnd, text='Загрузить из SVG (Графика)', command=self._svg_load)
-        button.grid()
+        button = tk.Button(self.wnd, text='Загрузить из SVG (Графика)', command=self._svg_load,
+                           height='5', width='40')
+        button.grid(padx='50', pady='20')
 
-        button = tk.Button(self.wnd, text='Загрузить из CSV (Таблица)', command=self._csv_load)
-        button.grid(row=1)
+        button = tk.Button(self.wnd, text='Загрузить из CSV (Таблица)', command=self._csv_load,
+                           height='5', width='40')
+        button.grid(row=1, padx='50', pady='20')
 
-        button = tk.Button(self.wnd, text='Создать с нуля', command=self._new_table)
-        button.grid(row=2)
+        button = tk.Button(self.wnd, text='Создать с нуля', command=self._new_table,
+                           height='5', width='40')
+        button.grid(row=2, padx='50', pady='20')
 
         self.wnd.attributes('-topmost', 'true')
         self.wnd.focus_force()
@@ -43,4 +46,10 @@ class StartWindow:
         self.wnd.destroy()
 
     def _new_table(self):
-        print('new_table')
+        filename = filedialog.asksaveasfilename(initialdir="C:/Users/User/Documents/Project/py_svg_parser",
+                                              title="Select file",
+                                              filetypes=(("svg files", "*.csv"),))
+        model = DataModel()
+        model.new_table(filename)
+        self.updateParent()
+        self.wnd.destroy()
