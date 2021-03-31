@@ -7,15 +7,6 @@ from services.parse_svg import SVGParser
 from ui.chart_window import ChartWindow
 from ui.start_window import StartWindow
 
-headers = [
-    "Первичная формулировка",
-    "Внешняя / Внутренняя",
-    "Классификация проблеммы",
-    "Бизнесс процесс",
-    "Вид биснесс процесса",
-    "З.Г.Д."
-]
-
 drop_opt_1 = [
     "Внешняя",
     "Внутренняя"
@@ -23,7 +14,7 @@ drop_opt_1 = [
 
 
 def goto_charts():
-    global df
+    df = DataModel().df
     update_dataframe()
     save_df()
     new_window = Toplevel(root)
@@ -32,19 +23,19 @@ def goto_charts():
 
 def save_df():
     update_dataframe()
-    global df
-    df.to_csv('current_test.csv', index=False, encoding='utf-8-sig')
+    df = DataModel().df
+    df.to_csv(DataModel().filename, index=False, encoding='utf-8-sig')
 
 
 def clear_grid():
-    global df
+    df = DataModel().df
     for widget in root.grid_slaves():
         widget.grid_forget()
     root.deiconify()
 
 
 def add_row():
-    global df
+    df = DataModel().df
     update_dataframe()
     d = {}
     for i in range(len(df.columns)):
@@ -54,13 +45,13 @@ def add_row():
 
 
 def delRow(row_num):
-    global df
+    df = DataModel().df
     update_dataframe()
     df.drop([df.index[row_num]], inplace=True)
     updateTable()
 
 def update_dataframe():
-    global df
+    df = DataModel().df
     global ar
     for c in range(len(df.columns)):
         for r in range(df.shape[0]):
@@ -69,7 +60,7 @@ def update_dataframe():
 
 def updateTable():
     global ar
-    global df
+    df = DataModel().df
     clear_grid()
     m = len(df.columns)
     ar = [[0] * m for i in range(df.shape[0])]
@@ -84,7 +75,7 @@ def updateTable():
             elif c == 1:
                 txt = StringVar(root, df.iloc[r - 1, 0])
                 ar[r-1][c-1] = txt
-                edit = Entry(root, textvariable=txt, width='75')
+                edit = Entry(root, textvariable=txt, width='100')
                 edit.focus()
                 edit.grid(column=c, row=r)
             elif c == 2:
@@ -109,13 +100,14 @@ def updateTable():
     button = Button(root, text='       ->        ', command=goto_charts)
     button.grid(column=len(df.columns), columnspan=3, row=df.shape[0] + 1)
 
+
 if __name__ == '__main__':
     root = Tk()
+    root.title('Main Window')
     start_window = Toplevel(root)
-    StartWindow(start_window)
+    StartWindow(start_window, updateTable)
 
     #
-    df = DataModel().df
     # root.quit()
     # ar = []
     #
