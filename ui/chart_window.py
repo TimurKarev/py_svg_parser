@@ -6,6 +6,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 class ChartWindow:
     def __init__(self, wnd, data):
         self.wnd = wnd
+        self.wnd.state('zoomed')
         self.data = data
         self.wnd.title('Графики')
 
@@ -41,9 +42,9 @@ class ChartWindow:
     def get_graph(self):
         self.in_out_correlation_plot()
         self.in_out_structure_plot()
-        self.in_problem_structure_plot()
-        self.out_problem_structure_plot()
-        self.business_structure_plot()
+        # self.in_problem_structure_plot()
+        # self.out_problem_structure_plot()
+        # self.business_structure_plot()
         # self.business_type_structure_plot()
         # self.zgd_structure_plot()
 
@@ -67,20 +68,28 @@ class ChartWindow:
 
     def in_out_correlation_plot(self):
         plot_df = self.data.iloc[:,1].value_counts()
-        figure1 = plt.Figure(figsize=(6, 5), dpi=100)
+        figure1 = plt.Figure(figsize=(5, 4), dpi=100)
         ax1 = figure1.add_subplot(111)
         bar1 = FigureCanvasTkAgg(figure1, self.frame)
         bar1.get_tk_widget().grid()
-        plot_df.plot(kind='pie', legend=True, ax=ax1)
+        plot_df.plot(kind='pie', legend=True, ax=ax1, wedgeprops=dict(width=0.5))
         ax1.set_title('Соотношение внешних и внутренних проблем')
 
     def in_out_structure_plot(self):
         plot_df = self.data.iloc[:,2].value_counts()
-        figure1 = plt.Figure(figsize=(6, 5), dpi=100)
-        ax1 = figure1.add_subplot(111)
+        figure = plt.Figure(figsize=(5, 4), dpi=100)
+        ax = figure.add_subplot(111)
+        bar = FigureCanvasTkAgg(figure, self.frame)
+        bar.get_tk_widget().grid(column=0, row=1)
+        plot_df.plot(kind='pie', legend=True, ax=ax, wedgeprops=dict(width=0.5))
+        ax.set_title('Структура внешних и внутренних проблем')
+
+        plot_df1 = self.data.iloc[:,2].value_counts()
+        figure1 = plt.Figure(figsize=(5, 4), dpi=100)
+        ax1 = figure1.add_subplot(111, projection="polar")
         bar1 = FigureCanvasTkAgg(figure1, self.frame)
-        bar1.get_tk_widget().grid()
-        plot_df.plot(kind='pie', legend=True, ax=ax1)
+        bar1.get_tk_widget().grid(column=1, row=1)
+        plot_df1.plot(kind='pie', legend=True, ax=ax1, wedgeprops=dict(width=0.5))
         ax1.set_title('Структура внешних и внутренних проблем')
 
     def in_problem_structure_plot(self):
@@ -91,7 +100,7 @@ class ChartWindow:
         ax2 = figure2.add_subplot(111)
         bar2 = FigureCanvasTkAgg(figure2, self.frame)
         bar2.get_tk_widget().grid()
-        df2.plot(kind='pie', legend=True, ax=ax2)
+        df2.plot(kind='pie', legend=True, ax=ax2, wedgeprops=dict(width=0.5))
         ax2.set_title('Структура внутренних проблем')
 
     def out_problem_structure_plot(self):
@@ -102,7 +111,7 @@ class ChartWindow:
         ax2 = figure2.add_subplot(111)
         bar2 = FigureCanvasTkAgg(figure2, self.frame)
         bar2.get_tk_widget().grid()
-        df2.plot(kind='pie', legend=True, ax=ax2)
+        df2.plot(kind='pie', legend=True, ax=ax2, wedgeprops=dict(width=0.5))
         ax2.set_title('Структура внешних проблем')
 
     def business_structure_plot(self):
@@ -111,5 +120,5 @@ class ChartWindow:
         ax1 = figure1.add_subplot(111)
         bar1 = FigureCanvasTkAgg(figure1, self.frame)
         bar1.get_tk_widget().grid()
-        plot_df.plot(kind='pie', legend=True, ax=ax1)
+        plot_df.plot(kind='pie', legend=True, ax=ax1, wedgeprops=dict(width=0.5))
         ax1.set_title('Структура бизнесс процессов')
