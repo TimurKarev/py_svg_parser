@@ -14,6 +14,8 @@ drop_opt_1 = [
 ]
 
 
+ar = []
+
 def goto_charts():
     df = DataModel().df
     update_dataframe()
@@ -23,19 +25,19 @@ def goto_charts():
 
 
 def save_df():
-    update_dataframe()
     df = DataModel().df
     df.to_csv(DataModel().filename, index=False, encoding='utf-8-sig')
 
 def save_as_df():
-    filename = filedialog.asksaveasfilename(initialdir="C:/Users/User/Documents/Project/py_svg_parser",
+    filename = filedialog.asksaveasfilename(initialdir=Path().cwd(),
                                             title="Select file",
-                                            filetypes=(("svg files", "*.csv"),))
+                                            filetypes=(("csv files", "*.csv"),))
+    if filename[-4:] != '.csv':
+        filename = filename + '.csv'
     DataModel().filename = Path(filename)
     save_df()
 
 def clear_grid():
-    df = DataModel().df
     for widget in root.grid_slaves():
         widget.grid_forget()
     root.deiconify()
@@ -43,7 +45,6 @@ def clear_grid():
 
 def add_row():
     df = DataModel().df
-    update_dataframe()
     d = {}
     for i in range(len(df.columns)):
         d[df.columns[i]] = ' '
@@ -51,22 +52,26 @@ def add_row():
     updateTable()
 
 
+
 def delRow(row_num):
     df = DataModel().df
-    update_dataframe()
     df.drop([df.index[row_num]], inplace=True)
     updateTable()
+
 
 def update_dataframe():
     df = DataModel().df
     global ar
     for c in range(len(df.columns)):
         for r in range(df.shape[0]):
-            df.iloc[r,c] = ar[r][c].get().strip()
+            df.iloc[r, c] = ar[r][c].get().strip()
     updateTable()
+
 
 def updateTable():
     global ar
+    global root
+
     df = DataModel().df
     clear_grid()
     m = len(df.columns)
@@ -107,33 +112,11 @@ def updateTable():
     button = Button(root, text='       ->        ', command=goto_charts)
     button.grid(column=len(df.columns), columnspan=3, row=df.shape[0] + 1)
 
+    root.title(DataModel().filename)
+
 
 if __name__ == '__main__':
     root = Tk()
     root.title('Main Window')
     start_window = Toplevel(root)
     StartWindow(start_window, updateTable)
-
-    #
-    # root.quit()
-    # ar = []
-    #
-    # try:
-    #     root.filename = filedialog.askopenfilename()  # (initialdir="/", title="Select file",
-    #     # filetypes=(("svg files", "*.svg"), ("all files", "*.*")))
-    # except:
-    #     print('kda;ldska;ldk;')
-    #
-    # if root.filename[-3:] == 'svg':
-    #     problems = SVGParser.parse_svg(root.filename)
-    #     column_num = len(headers)
-    #     df = pd.DataFrame(problems, columns=[headers[0]])
-    #     for i in range(1, column_num):
-    #         df.insert(len(df.columns), headers[i], value='')
-    # elif root.filename[-3:] == 'csv':
-    #     df = pd.read_csv('current_test.csv')
-    #     df = df.fillna(' ')
-    #
-    # updateTable()
-    #
-    # root.focus_force()

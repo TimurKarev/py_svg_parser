@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+from pathlib import Path
 
 from models.data_model import DataModel
 
@@ -29,7 +30,7 @@ class StartWindow:
 
     def _svg_load(self):
         self.wnd.attributes('-topmost', 'false')
-        filename = filedialog.askopenfilename(initialdir="C:/Users/User/Documents/Project/py_svg_parser", title="Select file",
+        filename = filedialog.askopenfilename(initialdir=Path().cwd(), title="Select file",
                                               filetypes=(("svg files", "*.svg"),))
         model = DataModel()
         model.load_from_svg(filename)
@@ -38,7 +39,7 @@ class StartWindow:
 
     def _csv_load(self):
         self.wnd.attributes('-topmost', 'false')
-        filename = filedialog.askopenfilename(initialdir="C:/Users/User/Documents/Project/py_svg_parser", title="Select file",
+        filename = filedialog.askopenfilename(initialdir=Path().cwd(), title="Select file",
                                               filetypes=(("csv files", "*.csv"),))
         model = DataModel()
         model.load_from_csv(filename)

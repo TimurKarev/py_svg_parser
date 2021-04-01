@@ -27,7 +27,6 @@ class DataModel(metaclass=PySingleton):
     def load_from_csv(self, filename):
         self.filename = filename
         self.filename = Path(self.filename)
-        print(self.filename)
 
         self.df = pd.read_csv(filename)
         self.df = self.df.fillna(' ')
@@ -35,7 +34,6 @@ class DataModel(metaclass=PySingleton):
     def load_from_svg(self, filename):
         self.filename = filename[:-3] + 'csv'
         self.filename = Path(self.filename)
-        print(filename)
 
         problems = SVGParser.parse_svg(filename)
         column_num = len(self.headers)
@@ -47,7 +45,6 @@ class DataModel(metaclass=PySingleton):
     def new_table(self, filename):
         self.filename = filename + '.csv'
         self.filename = Path(self.filename)
-        print(self.filename)
 
         self._create_empty_data()
 

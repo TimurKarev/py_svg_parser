@@ -8,6 +8,9 @@ tkintertable = "*"
 pandas = "*"
 matplotlib = "*"
 python-singleton-metaclasses = "*"
+pyinstaller = "*"
+py2exe = "*"
+pypiwin32 = "*"
 
 [dev-packages]
 
