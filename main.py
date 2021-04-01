@@ -35,6 +35,7 @@ def save_as_df():
     if filename[-4:] != '.csv':
         filename = filename + '.csv'
     DataModel().filename = Path(filename)
+    update_dataframe()
     save_df()
 
 def clear_grid():
@@ -44,6 +45,7 @@ def clear_grid():
 
 
 def add_row():
+    update_dataframe()
     df = DataModel().df
     d = {}
     for i in range(len(df.columns)):
@@ -53,10 +55,13 @@ def add_row():
 
 
 
+
 def delRow(row_num):
+    update_dataframe()
     df = DataModel().df
     df.drop([df.index[row_num]], inplace=True)
     updateTable()
+
 
 
 def update_dataframe():
